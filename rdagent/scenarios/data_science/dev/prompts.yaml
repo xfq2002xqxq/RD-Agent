@@ -26,9 +26,6 @@ exp_feedback:
       - Consistent prediction methodologies between validation and test datasets.
       - No shortcuts or fold-specific strategies applied inconsistently.
       - Rigorous checks for corner-case consistency.
-      - If the validation score appears unreliable, provide concrete evidence from the scenario description or code implementation. Do not rely on assumptions without direct supporting evidence.
-    - Additionally, detect whether the setup introduces structural risks, such as overfitting-prone finetuning strategies or domain adaptation on insufficient data.
-      - If overfitting is detected, provide a detailed analysis explaining how and why it occurs, referencing scenario description, code implementation, and validation scores to support your findings.
     - If such discrepancies or risks are found:
       - Clearly document these issues in `Reasoning`, referencing both scenario description and code implementation—not just validation scores.
       - Set `"Evaluation Aligned With Task": "no"` and `"Replace Best Result": "no"`.
@@ -37,7 +34,7 @@ exp_feedback:
 
     Step 3: Analyze Experimental Results (if format and evaluation alignment correct)
     - Explicitly confirm or refute the hypothesis with precise data points or performance trends.
-    - Directly compare the current `ensemble` validation score to the SOTA `ensemble` validation score. Do not focus on individual models unless anomalies are significant.
+    - Directly compare the current `ensemble` validation score to the SOTA `ensemble` validation score. 
     - Based on the metric used in the competition, the comparison should fit into the following categories:
       - If the current `ensemble` validation score is obviously worse than the SOTA `ensemble` validation score, set `"Replace Best Result": "no"`.
       - If the current `ensemble` validation score is obviously better than the SOTA `ensemble` validation score, set `"Replace Best Result": "yes"`.
@@ -50,7 +47,6 @@ exp_feedback:
     Step 4: Analyze Code With Similar validation Results
     - If the current `ensemble` validation score is similar to the SOTA `ensemble` validation score, give the decision based on the comparison between the current experiment and SOTA.
     - The current code should replace the best result if the code is:
-      - Less potential overfitting and no data leakage. The code should not modify the validation and test set distributions.
       - Using best practices and modeling techniques. The code should has a more reasonable and efficient choice of every component based on the scenario.
       - Interpretable and domain alignment. The code should be tied to solid domain knowledge and be interpretable.
       - More resource efficiency. The code should be more efficient in terms of time and space complexity.
@@ -170,9 +166,6 @@ exp_feedback_draft:
       - Consistent prediction methodologies between validation and test datasets.
       - No shortcuts or fold-specific strategies applied inconsistently.
       - Rigorous checks for corner-case consistency.
-      - If the validation score appears unreliable, provide concrete evidence from the scenario description or code implementation. Do not rely on assumptions without direct supporting evidence.
-    - Additionally, detect whether the setup introduces structural risks, such as overfitting-prone finetuning strategies or domain adaptation on insufficient data.
-      - If overfitting is detected, provide a detailed analysis explaining how and why it occurs, referencing scenario description, code implementation, and validation scores to support your findings.
     - If such discrepancies or risks are found:
       - Clearly document these issues in `Reasoning`, referencing both scenario description and code implementation—not just validation scores.
       - Set `"Evaluation Aligned With Task": "no"` and `"Replace Best Result": "no"`.

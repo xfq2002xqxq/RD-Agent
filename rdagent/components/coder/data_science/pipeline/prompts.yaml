@@ -163,32 +163,32 @@ pipeline_coder:
 
     ### Paths & flags
     Use `{% include "scenarios.data_science.share:scen.cache_path" %}` as cache root and `{% include "scenarios.data_science.share:scen.input_path" %}` as the original data root.
-    The mock dataset ids is in `{% include "scenarios.data_science.share:scen.cache_path" %}/mock_ids`.
+    The mock dataset ids is in `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids`.
 
     ### One-time creation (idempotent)
-    If `{% include "scenarios.data_science.share:scen.cache_path" %}/mock_ids` does not exist, create it by splitting the original training data:
+    If `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids` does not exist, create it by splitting the original training data:
     Split 10% of the original train id as mock test and keep 90% as mock train.
     Prefer stratified split when possible; if it fails (e.g., rare classes), fall back to non-stratified split.
     Use a fixed random seed (e.g., {{ random_seed | default(42) }}) for reproducibility.
-    Save files in `{% include "scenarios.data_science.share:scen.cache_path" %}/mock_ids/*.csv`:
+    Save files in `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids/*.csv`:
 
     train_id.csv (the 90% part, same schema as original train, including the label column).
     test_id.csv (the 10% part, without the label column).
     label.csv (the 10% labels only).
     
     Training & validation source
-    Always use train id from `{% include "scenarios.data_science.share:scen.cache_path" %}`/mock_ids/train.* (the 90% split).
+    Always use train id from `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids/train.*` (the 90% split).
     Load source data other than id from origin `{% include "scenarios.data_science.share:scen.input_path" %}` 
 
     ### Scoring (scores.csv)
-    Compute scores by predicting on test data from `{% include "scenarios.data_science.share:scen.cache_path" %}/mock_ids/` and comparing to `{% include "scenarios.data_science.share:scen.cache_path" %}/mock_ids/label.csv` using the competition's official metric.
+    Compute scores by predicting on test data from `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids/` and comparing to `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids/label.csv` using the competition's official metric.
     Always build submission.csv by running inference on the real test set under `{% include "scenarios.data_science.share:scen.input_path" %}` , not the mock test.
     {% else %}
     Training & validation source
     Load train data from origin `{% include "scenarios.data_science.share:scen.input_path" %}` 
 
     ### Scoring (scores.csv)
-    Compute scores by predicting on test data from `{% include "scenarios.data_science.share:scen.cache_path" %}/mock_ids/` and comparing to `{% include "scenarios.data_science.share:scen.cache_path" %}/mock_ids/label.csv` using the competition's official metric.
+    Compute scores by predicting on valid data id from `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids/test_id.csv` and comparing to `{% include "scenarios.data_science.share:scen.cache_path" %}mock_ids/label.csv` using the competition's official metric.
     Always build submission.csv by running inference on the real test set under `{% include "scenarios.data_science.share:scen.input_path" %}` , not the mock test.
     {% endif %}
 
