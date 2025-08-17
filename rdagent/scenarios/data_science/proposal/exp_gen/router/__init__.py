@@ -113,6 +113,7 @@ class ParallelMultiTraceExpGen(ExpGen):
                 ):
                     DS_RD_SETTING.coding_fail_reanalyze_threshold = 100000
                     DS_RD_SETTING.consecutive_errors = 100000
+                    DS_RD_SETTING.mock_data_by_LLM = False
                     exp = self.merge_exp_gen.gen(trace, plan=ds_plan)
                     exp_gen_type = type(self.merge_exp_gen).__name__
                 else:
