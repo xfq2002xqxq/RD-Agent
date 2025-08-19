@@ -129,7 +129,7 @@ pipeline_coder:
     import json, numpy as np
 
     SEED = 42  # fixed seed
-    cache_path = Path("workspace_cache/split_indices.json")
+    cache_path = Path("workspace_cache/split/indices.json")
 
     if cache_path.exists():
         idx = json.loads(cache_path.read_text())
@@ -145,7 +145,7 @@ pipeline_coder:
     X_valid, y_valid = train_X[valid_idx], train_y[valid_idx]
     ```
 
-    Important: do **not** create a new split in other modules/calls; always load `workspace_cache/split_indices.json` if it exists.
+    Important: do **not** create a new split in other modules/calls; always load `workspace_cache/split/indices.json` if it exists.
     Your debug code should run exactly the same as the full run, except for the data sampling and epoch number, to ensure the correctness of the code.
     You should print total time and estimated time in standard output using print function in the following schema:
     === Start of Debug Information ===
@@ -211,8 +211,13 @@ pipeline_coder:
     # Competition Information
     {{ competition_info }}
 
-    # Data Folder Description (All path are relative to the data folder, i.e. "{% include "scenarios.data_science.share:scen.input_path" %}")
+    # Data Folder Description (All path are relative to the data folder "{% include "scenarios.data_science.share:scen.input_path" %}")
     {{ folder_spec }}
+
+    {% if cache_folder_info %}
+    # Cache Folder Description (All path are relative to the cache folder  "{% include "scenarios.data_science.share:scen.cache_path" %}split/")
+    {{ cache_folder_info }}
+    {% endif %}
     
     {% if latest_code %}
     # Former code
