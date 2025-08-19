@@ -120,6 +120,32 @@ pipeline_coder:
         fold_indices = KFold(...).split(train_X, train_y) or other split strategy
     ```
     You should sample the data after train valid split. When you split the data after sampling, you might get a class with only one sample which might cause the split strategy to fail. 
+    To keep the **same** train/valid split across different LLM calls and runs:
+    1) use a fixed random seed everywhere (`random_state=<SEED>`, `np.random.seed(SEED)`, `torch.manual_seed(SEED)`); and
+    2) **persist** the chosen indices to disk and **reuse** them if present.
+
+    ```python
+    from pathlib import Path
+    import json, numpy as np
+
+    SEED = 42  # fixed seed
+    cache_path = Path("workspace_cache/split_indices.json")
+
+    if cache_path.exists():
+        idx = json.loads(cache_path.read_text())
+        train_idx, valid_idx = np.array(idx["train"]), np.array(idx["valid"])
+    else:
+        # use the generator created above (fold_indices)
+        train_idx, valid_idx = next(fold_indices)
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps({"train": train_idx.tolist(), "valid": valid_idx.tolist()}))
+
+    # Always slice by the persisted indices
+    X_train, y_train = train_X[train_idx], train_y[train_idx]
+    X_valid, y_valid = train_X[valid_idx], train_y[valid_idx]
+    ```
+
+    Important: do **not** create a new split in other modules/calls; always load `workspace_cache/split_indices.json` if it exists.
     Your debug code should run exactly the same as the full run, except for the data sampling and epoch number, to ensure the correctness of the code.
     You should print total time and estimated time in standard output using print function in the following schema:
     === Start of Debug Information ===
